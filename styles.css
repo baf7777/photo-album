@@ -1,54 +1,532 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
+/* Сброс стилей и базовые настройки */
+* {
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    box-sizing: border-box;
 }
 
-h1 {
-    margin-top: 20px;
+/* Переменные для цветов и эффектов */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --shadow-light: 0 8px 32px rgba(31, 38, 135, 0.37);
+    --shadow-heavy: 0 15px 35px rgba(31, 38, 135, 0.2);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
 }
 
-.photo-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+/* Анимированный фон со звездами */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
 }
 
-.photo {
-    margin: 10px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+.stars, .twinkling {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: -1;
 }
 
-.photo img {
-    max-width: 100%;
-    height: auto;
+.stars {
+    background: #000 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="white" opacity="0.8"/><circle cx="80" cy="40" r="1" fill="white" opacity="0.6"/><circle cx="40" cy="80" r="1" fill="white" opacity="0.9"/><circle cx="90" cy="90" r="1" fill="white" opacity="0.7"/><circle cx="10" cy="60" r="1" fill="white" opacity="0.5"/></svg>') repeat;
+    background-size: 200px 200px;
+    animation: move-twink-back 200s linear infinite;
 }
 
-/* Добавляем анимацию для появления фотографий */
-@keyframes fadeIn {
+.twinkling {
+    background: transparent url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="25" cy="25" r="1" fill="white" opacity="0.4"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.6"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.3"/><circle cx="10" cy="90" r="1" fill="white" opacity="0.8"/></svg>') repeat;
+    background-size: 300px 300px;
+    animation: move-twink-back 100s linear infinite;
+}
+
+@keyframes move-twink-back {
+    from { background-position: 0 0; }
+    to { background-position: -10000px 5000px; }
+}
+
+/* Контейнер */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Заголовок */
+.header {
+    text-align: center;
+    padding: 60px 0 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+    animation: titleGlow 3s ease-in-out infinite alternate;
+    text-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+}
+
+.title i {
+    margin: 0 15px;
+    color: #ff6b6b;
+    animation: heartbeat 2s ease-in-out infinite;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+    animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+@keyframes titleGlow {
+    0% { filter: brightness(1); }
+    100% { filter: brightness(1.2); }
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: scale(0.9);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0);
     }
-
 }
 
-/* Применяем анимацию ко всем фотографиям */
+/* Панель управления */
+.controls {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    margin: 0 20px 40px;
+    padding: 20px;
+    box-shadow: var(--shadow-light);
+    animation: slideDown 1s ease-out 0.3s both;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.filter-buttons, .view-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.view-controls {
+    margin-bottom: 0;
+}
+
+.filter-btn, .view-btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-btn:hover, .view-btn:hover {
+    background: var(--accent-gradient);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-heavy);
+}
+
+.filter-btn.active, .view-btn.active {
+    background: var(--secondary-gradient);
+    box-shadow: var(--shadow-heavy);
+}
+
+.filter-btn i, .view-btn i {
+    margin-right: 8px;
+}
+
+/* Основной контент */
+.main {
+    padding: 0 20px 60px;
+}
+
+.photo-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    animation: fadeInUp 1s ease-out 0.8s both;
+}
+
+.photo-container.masonry {
+    columns: 3;
+    column-gap: 30px;
+}
+
+.photo-container.carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.photo-container.carousel::-webkit-scrollbar {
+    height: 8px;
+}
+
+.photo-container.carousel::-webkit-scrollbar-track {
+    background: var(--glass-bg);
+    border-radius: 10px;
+}
+
+.photo-container.carousel::-webkit-scrollbar-thumb {
+    background: var(--accent-gradient);
+    border-radius: 10px;
+}
+
+/* Фотографии */
 .photo {
-    margin: 10px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: white;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 3s ease-in-out forwards;
-    /* Добавляем анимацию "появления" длительностью 0.5 секунды */
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: var(--shadow-light);
+    transition: all 0.4s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    animation: photoAppear 0.8s ease-out both;
+}
+
+.photo:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: var(--shadow-heavy);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.photo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.photo:hover::before {
+    opacity: 0.1;
+}
+
+.photo img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.photo:hover img {
+    transform: scale(1.05);
+}
+
+.photo-info {
+    margin-top: 15px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.photo-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.photo-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+@keyframes photoAppear {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+.modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    overflow: hidden;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+}
+
+.modal-body img {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 15px;
+    box-shadow: var(--shadow-heavy);
+}
+
+.modal-info {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.modal-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1001;
+    transition: all 0.3s ease;
+}
+
+.close:hover {
+    color: #ff6b6b;
+    transform: scale(1.1);
+}
+
+.modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    pointer-events: none;
+}
+
+.nav-btn {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    pointer-events: all;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-btn:hover {
+    background: var(--accent-gradient);
+    transform: scale(1.1);
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Подвал */
+.footer {
+    text-align: center;
+    padding: 40px 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--glass-border);
+    margin-top: 60px;
+}
+
+.footer p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Адаптивный дизайн */
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5rem;
+    }
+    
+    .photo-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .photo-container.masonry {
+        columns: 2;
+    }
+    
+    .filter-buttons, .view-controls {
+        gap: 10px;
+    }
+    
+    .filter-btn, .view-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .modal-content {
+        max-width: 95%;
+        margin: 20px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 2rem;
+    }
+    
+    .photo-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .photo-container.masonry {
+        columns: 1;
+    }
+    
+    .controls {
+        margin: 0 10px 30px;
+        padding: 15px;
+    }
+    
+    .filter-btn, .view-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Дополнительные анимации */
+.photo:nth-child(1) { animation-delay: 0.1s; }
+.photo:nth-child(2) { animation-delay: 0.2s; }
+.photo:nth-child(3) { animation-delay: 0.3s; }
+.photo:nth-child(4) { animation-delay: 0.4s; }
+.photo:nth-child(5) { animation-delay: 0.5s; }
+.photo:nth-child(6) { animation-delay: 0.6s; }
+
+/* Эффект печатания для заголовка */
+@keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+/* Пульсирующий эффект для кнопок */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+}
+
+.filter-btn.active {
+    animation: pulse 2s infinite;
 }
